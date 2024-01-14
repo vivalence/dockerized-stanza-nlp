@@ -1,0 +1,11 @@
+version: '3'
+services:
+  stanza-nlp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: stanza-nlp-1
+    container_name: stanza-nlp
+    command: "python3 script.py; python3"
+    volumes:
+      - ./script.py:/app/stanza/script.py 

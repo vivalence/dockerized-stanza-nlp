@@ -29,6 +29,7 @@ RUN pip install -e .
 # Copy the current directory contents into the container at /app/stanza
 WORKDIR /app/stanza
 
+#COPY . /app/stanza
 
 # Run script.py when the container launches
-#CMD ["python", "script.py"]
+CMD ["python3", "script.py"]
