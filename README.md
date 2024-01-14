@@ -11,23 +11,42 @@ git clone https://github.com/vivalence/dockerized-stanza-nlp.git
 cd dockerized-stanza-nlp
 ````
 
-## Build Docker image
+## First running option
+
+### Build Docker image
 
 ````
 docker build -t stanza-nlp .
 ````
+stanza-nlp is image name. You can custome this name.
 
-## Create and run container
+### Create and run container
 ````
-docker run -it  stanza-nlp
+docker run -it -v "./script.py:/app/stanza/script.py" stanza-nlp python3 script.py
 ````
 
-## Try stanza-nlp
-````
->>> import stanza
->>> stanza.download('en')       # This downloads the English models for the neural pipeline
->>> nlp = stanza.Pipeline('en') # This sets up a default neural pipeline in English
->>> doc = nlp("Barack Obama was born in Hawaii.  He was elected president in 2008.")
->>> doc.sentences[0].print_dependencies()
+'./script.py' is file location of python script.
+stanza-nlp is image name that already build.
 
+
+## Second running option
+
+### Build and running container
 ````
+docker compose up -d
+```` 
+
+### Check container name 
+````
+docker compose ps -a
+````
+
+### Check output of container
+````
+docker logs -f  stanza-nlp
+````
+stanza-nlp is container name, please make sure it right.
+
+### Modify script
+To modify script, open `script.py` file, modify and saved. Then restart docker container with `docker compose restart`. Finally, check script result with show log `docker logs -f  stanza-nlp`.
+
