@@ -26,10 +26,14 @@ WORKDIR /app/stanza
 
 RUN pip install -e .
 
+RUN pip install Flask gunicorn asyncio aiohttp
+
 # Copy the current directory contents into the container at /app/stanza
 WORKDIR /app/stanza
 
-#COPY . /app/stanza
+EXPOSE 5000
+
+COPY . /app/stanza
 
 # Run script.py when the container launches
-CMD ["python3", "script.py"]
+CMD ["/usr/local/bin/gunicorn","-w","4","-b","0.0.0.0:5000","--timeout","0", "-k", "sync","script:app"]
