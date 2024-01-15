@@ -133,5 +133,5 @@ langfrom value :
 -vi->Vietnamese
 -wo->Wolof
 ````
-<div align="center"><img src="https://github.com/vivalence/dockerized-stanza-nlp/blob/docker/post-example.png" height="100px"/></div>
+<div align="center"><img src="https://github.com/vivalence/dockerized-stanza-nlp/blob/docker/post-example.png" /></div>
 
