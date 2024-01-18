@@ -3,12 +3,24 @@ import asyncio
 import stanza
 import logging
 import json
+import os
+from stanza.resources.common import DEFAULT_MODEL_DIR
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder=os.path.abspath(os.path.dirname(__file__)))
 
+
+pipelineCache = dict()
+
+
+def get_file(path):
+    res = os.path.join(os.path.dirname(os.path.abspath(__file__)), path)
+    print(res)
+    return res
 
 @app.route('/nlp', methods=['POST'])
 def get_data():
+    global pipelineCache
+
     try:
         langfrom = request.form.get('langfrom')
         stringnlp = request.form.get('stringnlp')
@@ -18,9 +30,11 @@ def get_data():
 	#pos,upos,ner,lemma,depparse,parse
         processors = 'tokenize,mwt,pos,lemma,depparse'
 #        nlp = stanza.Pipeline(lang=langfrom, processors=processors, download_method=None)
-
-        nlp = stanza.Pipeline(lang=langfrom, processors=annotations)
-        doc = nlp(stringnlp)
+        
+        if langfrom not in pipelineCache:
+            pipelineCache[langfrom] = stanza.Pipeline(lang=langfrom, processors=annotations, use_gpu=False)
+        #nlp = stanza.Pipeline(lang=langfrom, processors=annotations)
+        doc = pipelineCache[langfrom](stringnlp)
 
         # Convert Span objects to dictionaries
         serializable_entities = [
