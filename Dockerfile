@@ -36,4 +36,10 @@ EXPOSE 5000
 COPY . /app/stanza
 
 # Run script.py when the container launches
-CMD ["/usr/local/bin/gunicorn","-w","4","-b","0.0.0.0:5000","--timeout","0", "-k", "sync","script:app"]
+# CMD ["/usr/local/bin/gunicorn","-w","1","-b","0.0.0.0:5000","--timeout","0", "-k", "sync","script:app"]
+
+CMD ["/usr/local/bin/gunicorn", \
+     "-b", "0.0.0.0:5000", \
+     "--timeout", "0", \
+     "-k", "sync", \
+     "script:app"]
