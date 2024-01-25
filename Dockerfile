@@ -12,21 +12,22 @@ RUN apt-get update && \
     cmake \
     wget \
     git \
-    nano \
+    vim \
+    libev-dev \ 
     ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
 
-# Install Stanza
+
 RUN pip install --upgrade pip
 
 RUN git clone https://github.com/stanfordnlp/stanza.git
-#RUN cd stanza
 WORKDIR /app/stanza
 
 RUN pip install -e .
 
-RUN pip install Flask gunicorn asyncio aiohttp
+RUN pip install Flask bjoern 
+# RUN pip install gunicorn asyncio aiohttp 
 
 # Copy the current directory contents into the container at /app/stanza
 WORKDIR /app/stanza
@@ -38,8 +39,11 @@ COPY . /app/stanza
 # Run script.py when the container launches
 # CMD ["/usr/local/bin/gunicorn","-w","1","-b","0.0.0.0:5000","--timeout","0", "-k", "sync","script:app"]
 
-CMD ["/usr/local/bin/gunicorn", \
-     "-b", "0.0.0.0:5000", \
-     "--timeout", "0", \
-     "-k", "sync", \
-     "script:app"]
+CMD ["python", "script.py"]
+
+
+# CMD ["/usr/local/bin/gunicorn", \
+#      "-b", "0.0.0.0:5000", \
+#      "--timeout", "0", \
+#      "-k", "sync", \
+#      "script:app"]

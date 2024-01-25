@@ -1,10 +1,21 @@
 from flask import Flask, request, jsonify
-import asyncio
+import bjoern
 import stanza
 import logging
 import json
 import os
 from stanza.resources.common import DEFAULT_MODEL_DIR
+
+def verify_inputs(data):
+    language = data.get('language')
+    text = data.get('text')
+    processors = data.get('processors')
+
+    if not all(isinstance(value, str) for value in [language, text, processors]):
+        raise ValueError('All inputs must be strings')
+
+    return True
+
 
 os.makedirs(DEFAULT_MODEL_DIR, exist_ok=True)
 print(f"Stanza model directory: {DEFAULT_MODEL_DIR}")
@@ -18,7 +29,6 @@ def ensure_stanza(language):
         stanza.download(language, model_dir=DEFAULT_MODEL_DIR)
     else:
         print(f"Stanza model for '{language}' already exists. Skipping download.")
-
 
 def get_pipeline(language, processors):
     global pipelinesCache
@@ -71,7 +81,14 @@ app = Flask(__name__, static_url_path='', static_folder=os.path.abspath(os.path.
 @app.route('/nlp', methods=['POST'])
 def get_data():
     try:
-        data = request.get_json()  # Get JSON data from the request
+        data = request.get_json() 
+
+        try:
+            verify_inputs(data)
+        except ValueError as error:
+            print(f"Error: {error}")
+            return jsonify({"error": "Input Validation Error", "err": e}), 500
+
         language = data['language']  
         stringnlp = data['text']
         processors = data['processors']
@@ -91,4 +108,5 @@ def get_data():
         return jsonify({"error": "Internal Server Error","err":e}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    bjoern.run(app, "0.0.0.0", 5000)
+    # app.run(host='0.0.0.0', port=5000)

@@ -8,13 +8,13 @@ Develop a Dockerized API service that integrates the Stanza Natural Language Pro
 - [X] **Docker Image**
   - Create a Docker image containing a Flask application and the Stanza library.
 
-- [ ] **API Functionality**
+- [x] **API Functionality**
   - The API should accept JSON input, utilize the Stanza library for NLP processing, and return JSON output.
 
-- [ ] **Customization**
+- [x] **Customization**
   - Allow environment variable settings for language selection (e.g., Spanish, English, German) and Stanza processors.
 
-- [ ] **Automated Build & Deployment**
+- [x] **Automated Build & Deployment**
   - Set up a GitHub Action for building the Docker image and publishing it to Docker Hub.
 
 - [X] **Integration**
