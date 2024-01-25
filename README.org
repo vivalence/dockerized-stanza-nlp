@@ -1,0 +1,46 @@
+* Stanza NLP Service
+** Features
+   - On-Demand Model Downloads: Automatically downloads necessary Stanza models for different languages as required.
+   - Pipeline Caching: Quick second-response times by caching pipelines.
+
+** Usage
+
+*** Run the Docker Container
+    #+begin_src bash
+    docker run -p 5000:5000 -v stanza_resources:/root/stanza_resources vivalence/dockerized-stanza-nlp
+    #+end_src
+    - Maps host's port 5000 to container's port 5000 for accessing the service.
+
+*** Run Docker Compose (if applicable)
+    #+begin_src yaml
+      version: '3'
+      services:
+        stanza-nlp:
+          image: vivalence/dockerized-stanza-nlp
+          ports:
+            - "5000:5000"
+          volumes:
+            - stanza_resources:/root/stanza_resources
+      volumes:
+        stanza_resources:
+    #+end_src
+
+** Data Structure / API Interface
+   - POST request to /nlp endpoint with the following JSON structure:
+     #+begin_src json
+     {
+       "language": "en",
+       "text": "Hello World!",
+       "processors": "tokenize,mwt,pos,lemma,depparse"
+     }
+     #+end_src
+
+** Response
+   - The service returns a JSON response containing processed NLP data:
+     #+begin_src json
+     {
+       "sentences": [...],
+       "entities": [...]
+     }
+     #+end_src
+     - Includes tokenized sentences, POS tags, lemmas, and dependency parse information.
