@@ -9,9 +9,8 @@
     #+begin_src bash
     docker run -p 5000:5000 -v stanza_resources:/root/stanza_resources vivalence/dockerized-stanza-nlp
     #+end_src
-    - Maps host's port 5000 to container's port 5000 for accessing the service.
 
-*** Run Docker Compose (if applicable)
+*** Run Docker Compose 
     #+begin_src yaml
       version: '3'
       services:
@@ -22,7 +21,7 @@
           volumes:
             - stanza_resources:/root/stanza_resources
       volumes:
-        stanza_resources:
+        stanza_resources: # model cache dir
     #+end_src
 
 ** Data Structure / API Interface
@@ -30,7 +29,7 @@
      #+begin_src json
      {
        "language": "en",
-       "text": "Hello World!",
+       "text": "Hello World",
        "processors": "tokenize,mwt,pos,lemma,depparse"
      }
      #+end_src
@@ -39,8 +38,21 @@
    - The service returns a JSON response containing processed NLP data:
      #+begin_src json
      {
-       "sentences": [...],
-       "entities": [...]
+       "sentences": [
+         {
+           "text": "Hello World",
+           "tokens": [
+             {"text": "Hello", "lemma": "hello", "pos": "INTJ"},
+             {"text": "World", "lemma": "world", "pos": "NOUN"}
+           ],
+           "dependencies": [
+             {"dep": "root", "governor": 0, "dependent": 2},
+             {"dep": "discourse", "governor": 2, "dependent": 1}
+           ]
+         }
+       ],
+       "entities": []
      }
      #+end_src
      - Includes tokenized sentences, POS tags, lemmas, and dependency parse information.
+
