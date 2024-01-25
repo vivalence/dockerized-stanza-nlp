@@ -78,6 +78,10 @@ def parse_doc(doc):
 
 app = Flask(__name__, static_url_path='', static_folder=os.path.abspath(os.path.dirname(__file__)))
 
+@app.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({"message": "Service is alive"})
+
 @app.route('/nlp', methods=['POST'])
 def get_data():
     try:
