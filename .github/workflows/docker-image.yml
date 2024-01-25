@@ -16,19 +16,13 @@ jobs:
     - name: Login to Docker Hub
       run: echo "${{secrets.DOCKERHUB_TOKEN}}" | docker login --username "${{secrets.DOCKERHUB_USERNAME}}" --password-stdin
 
-    - name: Tag Name
-      run: echo ${{ github.event.release.tag_name }}
     - name: Build and push Docker image
       run: |
         VERSION=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
-        docker build . --file Dockerfile -t ${{secrets.DOCKERHUB_USERNAME}}/dockerized-stanza-nlp:$VERSION
-        docker push ${{secrets.DOCKERHUB_USERNAME}}/dockerized-stanza-nlp:$VERSION
-        # Optionally push the latest tag as well
-        docker tag ${{secrets.DOCKERHUB_USERNAME}}/dockerized-stanza-nlp:$VERSION ${{secrets.DOCKERHUB_USERNAME}}/dockerized-stanza-nlp:latest
-        docker push ${{secrets.DOCKERHUB_USERNAME}}/dockerized-stanza-nlp:latest
+        echo $VERSION
 
-        # docker build . --file Dockerfile -t ${{secrets.DOCKERHUB_USERNAME}}/dockerized-stanza-nlp:latest
-        # docker push ${{secrets.DOCKERHUB_USERNAME}}/dockerized-stanza-nlp:latest
+        docker build . --file Dockerfile -t ${{secrets.DOCKERHUB_ORGNAME}}/dockerized-stanza-nlp:$VERSION
+        docker push ${{secrets.DOCKERHUB_ORGNAME}}/dockerized-stanza-nlp:$VERSION
 
-        # docker build . --file Dockerfile -t ${{secrets.DOCKERHUB_USERNAME}}/dockerized-stanza-nlp:${{ github.event.release.tag_name }}
-        # docker push ${{secrets.DOCKERHUB_USERNAME}}/dockerized-stanza-nlp:${{ github.event.release.tag_name }}
+        docker tag ${{secrets.DOCKERHUB_ORGNAME}}/dockerized-stanza-nlp:$VERSION ${{secrets.DOCKERHUB_ORGNAME}}/dockerized-stanza-nlp:latest
+        docker push ${{secrets.DOCKERHUB_ORGNAME}}/dockerized-stanza-nlp:latest
