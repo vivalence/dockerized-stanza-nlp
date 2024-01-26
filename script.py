@@ -66,9 +66,24 @@ def parse_doc(doc):
         tokens = []
         deps = []
         for word in sentence.words:
-            tokens.append({'index': word.id, 'word': word.text, 'lemma': word.lemma, 'pos': word.xpos, 'upos': word.upos, 'feats': word.feats, 'ner': word.parent.ner if word.parent.ner is None or word.parent.ner == 'O' else word.parent.ner[2:]})
-            deps.append({'dep': word.deprel, 'governor': word.head, 'governorGloss': sentence.words[word.head-1].text,
-            'dependent': word.id, 'dependentGloss': word.text})
+            print(word)
+            tokens.append({
+                'index': word.id,
+                'token': word.text,
+                'lemma': word.lemma,
+                'xpos': word.xpos,
+                'upos': word.upos,
+                'feats': word.feats,
+                'start_char': word.start_char,
+                'end_char': word.end_char,
+            })
+            deps.append({
+                'dep': word.deprel,
+                'governor': word.head,
+                'governorGloss': sentence.words[word.head-1].text,
+                'dependent': word.id, 'dependentGloss': word.text
+            })
+
         annotated_sentences.append({'basicDependencies': deps, 'tokens': tokens})
         if hasattr(sentence, 'constituency') and sentence.constituency is not None:
             annotated_sentences[-1]['parse'] = str(sentence.constituency)
@@ -86,6 +101,7 @@ def ping():
 def get_data():
     try:
         data = request.get_json() 
+        print(f"request data: {data}")
 
         try:
             verify_inputs(data)

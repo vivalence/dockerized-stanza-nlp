@@ -22,4 +22,5 @@
     :processors "tokenize,mwt,pos,lemma,depparse"))
 
 ;; Making the POST request
-(message "%s" (my-post-request "https://0.0.0.0:5050/nlp" my-data))
+(message "%s" (my-post-request "http://0.0.0.0:5050/nlp" my-data))
+;; (message "%s" (my-post-request "https://stanza.vivalence.com/nlp" my-data))
