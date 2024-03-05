@@ -28,7 +28,7 @@ def ensure_stanza(language):
         print(f"Downloading Stanza model for '{language}'...")
         stanza.download(language, model_dir=DEFAULT_MODEL_DIR)
     else:
-        # print(f"Stanza model for '{language}' already exists. Skipping download.")
+        print(f"Stanza model for '{language}' already exists. Skipping download.")
 
 def get_pipeline(language, processors):
     global pipelinesCache
