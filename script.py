@@ -18,9 +18,9 @@ def verify_inputs(data):
 
 
 os.makedirs(DEFAULT_MODEL_DIR, exist_ok=True)
-print(f"Stanza model directory: {DEFAULT_MODEL_DIR}")
+# print(f"Stanza model directory: {DEFAULT_MODEL_DIR}")
 
-print(f"Initiating pipeline cache...")
+# print(f"Initiating pipeline cache...")
 pipelinesCache = dict()
 
 def ensure_stanza(language):
@@ -28,16 +28,13 @@ def ensure_stanza(language):
         print(f"Downloading Stanza model for '{language}'...")
         stanza.download(language, model_dir=DEFAULT_MODEL_DIR)
     else:
-        print(f"Stanza model for '{language}' already exists. Skipping download.")
+        # print(f"Stanza model for '{language}' already exists. Skipping download.")
 
 def get_pipeline(language, processors):
     global pipelinesCache
     cacheKey = language + "_" + processors
 
     ensure_stanza(language)
-
-    print(f"current pipelines: {pipelinesCache}")
-    print(f"cacheKey: {cacheKey}")
 
     if cacheKey not in pipelinesCache:
         print(f"cacheKey: {cacheKey} NOT FOUND! building")
@@ -46,11 +43,13 @@ def get_pipeline(language, processors):
             processors=processors,
             use_gpu=False
         )
-        print(f"new pipelines: {pipelinesCache}")
+
     return pipelinesCache[cacheKey]
 
 
 def parse_doc(doc):
+    print("Parsing doc...")
+    print(doc)
     serializable_entities = [
         {
             "text": entity.text,
@@ -66,7 +65,7 @@ def parse_doc(doc):
         tokens = []
         deps = []
         for word in sentence.words:
-            print(word)
+            # print(word)
             tokens.append({
                 'index': word.id,
                 'token': word.text,
@@ -101,7 +100,7 @@ def ping():
 def get_data():
     try:
         data = request.get_json() 
-        print(f"request data: {data}")
+        # print(f"request data: {data}")
 
         try:
             verify_inputs(data)
